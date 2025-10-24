@@ -1,0 +1,11 @@
+[project]
+name = "pdf-summarizer"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dotenv>=0.9.9",
+    "notion-client>=2.6.0",
+    "pymupdf>=1.26.5",
+]
