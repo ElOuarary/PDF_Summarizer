@@ -7,4 +7,3 @@ class Summarizer:
         
     def summarize(self, text):
         return self.summarizer(text)
-    
