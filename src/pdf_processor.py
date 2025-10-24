@@ -1,9 +1,6 @@
 import os
-from pathlib import Path
 import pymupdf
 import logging
-
-source_directory = Path(os.getcwd())
 
 class PDFprocessor:
     def __init__(self):
@@ -14,7 +11,7 @@ class PDFprocessor:
             raise FileNotFoundError('')
         try:
             text = ""
-            with pymupdf.open(pdf_path) as file:
+            with pymupdf.open(pdf_path, filetype='text') as file:
                 for page in file:
                     text += page.get_text() + '\n'
             return text.strip()
@@ -24,10 +21,10 @@ class PDFprocessor:
         
     def get_info(self, pdf_path):
         try:
-            with pymupdf.open(pdf_path) as file:
+            with pymupdf.open(pdf_path, filetype='text') as file:
                 return {
-                    "num_pages": file.pages,
-                    "file_size": os.path.getsize(pdf_path)
+                    'num_pages': file.get_page_numbers(),
+                    'file_size': os.path.getsize(pdf_path)
                 }
         except:
             pass

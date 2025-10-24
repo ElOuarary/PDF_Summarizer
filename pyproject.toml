@@ -8,4 +8,6 @@ dependencies = [
     "dotenv>=0.9.9",
     "notion-client>=2.6.0",
     "pymupdf>=1.26.5",
+    "torch>=2.9.0",
+    "transformers>=4.57.1",
 ]
