@@ -1,0 +1,15 @@
+bert:
+  name: 'facebook/bart-large-cnn'
+  context_window:
+  max_tonkens:
+  summarization:
+    min_length:
+    max_length:
+
+pegasus:
+  name: 'google/pegasus-xsum'
+  context_window:
+  max_tonkens:
+  summarization:
+    min_length:
+    max_length:
