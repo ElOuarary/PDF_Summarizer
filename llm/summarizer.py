@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from google import genai
 import logging
 import os
-from pathlib import Path
 from transformers import pipeline
 import yaml
 
