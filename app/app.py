@@ -1,4 +1,8 @@
 import io
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from llm.summarizer import Summarizer
 import streamlit as st
 
 
@@ -43,25 +47,33 @@ with columns[0]:
         label='Upload file',
         type=['pdf', 'txt', 'docs', 'doc']
     )
-    if uploaded_file:
-        st.write(f'{uploaded_file.name} ({uploaded_file.size} bytes)')
+        
+def process_file(uploaded_file):
+    summarizer = Summarizer('bert')
+    content = io.StringIO(uploaded_file.getvalue().decode('utf-8'))
+    summary = summarizer.summarize(content.getvalue())
+    return summary
 
 with columns[1]:
     st.header('Processing Options')
     model = st.selectbox('Model Selection', ['bert', 'google'])
+    summarizer = Summarizer(model)
     auto_process = st.checkbox('Auto-process on upload', value=True)
     show_summary = st.checkbox('Show summary preview', value=True)
-    if st.button("Process File", disabled=not uploaded_file):
-        pass
-    
+    process = st.button('Process file', disabled=not uploaded_file)
 
-st.title('Result')    
+
 if uploaded_file:
-    #summarizer = Summarizer()
-    st.title('Content')
-    content = io.StringIO(uploaded_file.getvalue().decode('utf-8'))
-    st.write(content)
-    st.title('Summary')
+    summary = None
+    if auto_process:
+        summary = process_file(uploaded_file)
+    elif process:
+        summary = process_file(uploaded_file)
+    if show_summary and summary is not None:
+        st.title('Summary Preview')
+        st.write(summary)
         
-    #summary = summarizer(content.getvalue())[0]['summary_text']
-    #st.write(summary)
+if uploaded_file:
+    push_to_workspace = st.button('Push the summary to your notion workspace')
+    if push_to_workspace:
+        pass

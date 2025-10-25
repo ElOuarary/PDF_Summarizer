@@ -1,5 +1,5 @@
 from pdf_processor import PDFprocessor
-from summarizer import Summarizer
+from llm.summarizer import Summarizer
 
 processor = PDFprocessor()
 summarizer = Summarizer()
