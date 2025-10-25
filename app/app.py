@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from llm.summarizer import Summarizer
+from notion.notion_client import Client
 import streamlit as st
 
 
@@ -20,19 +21,16 @@ if 'app' not in st.session_state:
 if 'notion token' not in st.session_state:
     st.session_state.notion_token = None
 
-if 'notion_database_id' not in st.session_state:
-    st.session_state.notion_database_id = None
-
 app = st.session_state
 
 # Configuration for the notion Integration
 with st.sidebar:
     st.header('Configuration')
-    st.session_state.notion_token = st.text_input('Configure your notion token')
-    st.session_state.notion_database_id = st.text_input('Configure your Notion Database ID')
+    notion_token = st.session_state.notion_token = st.text_input('Configure your notion token')
     
     if st.button('Connect to your Notion Workspace'):
-        pass
+        client = Client(notion_token)
+        st.session_state.notion_token = notion_token
 
 # Main content area the upload file are and the configuration are for the model
 columns = st.columns(2, gap='large')
@@ -72,5 +70,6 @@ if uploaded_file:
         
 if uploaded_file and summary:
     push_to_workspace = st.button('Push the summary to your notion workspace')
-    if push_to_workspace:
-        pass
+    if push_to_workspace and notion_token:
+        client = Client(notion_token)
+        client.create_page(summary)
