@@ -1,7 +1,8 @@
 bert:
   name: 'facebook/bart-large-cnn'
   context_window:
-  max_tonkens:
+  min_page: 1
+  max_page: 1
   summarization:
     min_length:
     max_length:
@@ -9,7 +10,13 @@ bert:
 pegasus:
   name: 'google/pegasus-xsum'
   context_window:
-  max_tonkens:
+  min_page: 1
+  max_page: 1
   summarization:
     min_length:
     max_length:
+
+gemini:
+  name: 'gemini-2.5-flash'
+  min_page: 1
+  max_page: 1000

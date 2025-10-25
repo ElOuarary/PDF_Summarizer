@@ -36,10 +36,7 @@ with st.sidebar:
         pass
 
 # Main content area the upload file are and the configuration are for the model
-columns = st.columns(
-    2,
-    gap='large'
-    )
+columns = st.columns(2, gap='large')
 
 with columns[0]:
     st.header('Upload File')
@@ -47,33 +44,34 @@ with columns[0]:
         label='Upload file',
         type=['pdf', 'txt', 'docs', 'doc']
     )
-        
-def process_file(uploaded_file):
-    summarizer = Summarizer('bert')
-    content = io.StringIO(uploaded_file.getvalue().decode('utf-8'))
-    summary = summarizer.summarize(content.getvalue())
-    return summary
 
 with columns[1]:
     st.header('Processing Options')
-    model = st.selectbox('Model Selection', ['bert', 'google'])
+    model = st.selectbox('Model Selection', ['bert', 'pegasus', 'gemini'])
     summarizer = Summarizer(model)
     auto_process = st.checkbox('Auto-process on upload', value=True)
     show_summary = st.checkbox('Show summary preview', value=True)
     process = st.button('Process file', disabled=not uploaded_file)
 
+def process_file(uploaded_file, model):
+    if model == 'gemini':
+        summary = summarizer.summarize_with_gemini(uploaded_file)
+    else:
+        content = uploaded_file.getvalue().decode('utf-8')
+        summary = summarizer.summarize_with_local_model(content)[0]['summary_text']
+    return summary
 
+summary = None
 if uploaded_file:
-    summary = None
     if auto_process:
-        summary = process_file(uploaded_file)
+        summary = process_file(uploaded_file, model)
     elif process:
-        summary = process_file(uploaded_file)
+        summary = process_file(uploaded_file, model)
     if show_summary and summary is not None:
         st.title('Summary Preview')
         st.write(summary)
         
-if uploaded_file:
+if uploaded_file and summary:
     push_to_workspace = st.button('Push the summary to your notion workspace')
     if push_to_workspace:
         pass
