@@ -60,9 +60,7 @@ class Summarizer:
             self.logger.warning(f'{self.model} was not loaded')
             return None
         try:
-            result = self.summarizer(
-                text
-            )
+            result = self.summarizer(text)
             return result
         except Exception as e:
             self.logger.error(f'Summarization failed: {e}')
